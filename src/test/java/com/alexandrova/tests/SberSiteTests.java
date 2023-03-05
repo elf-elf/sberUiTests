@@ -20,7 +20,6 @@ public class SberSiteTests extends TestBase {
         mainPage.chechLogoFontSize();
     }
     @Tag("page")
-    @AllureId("14671")
     @DisplayName("Проверка перехода в разделы сайта.")
     @ParameterizedTest(name = "Выполняется переход в раздел \"{0}\"")
     @CsvSource(value = {
