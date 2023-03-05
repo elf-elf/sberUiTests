@@ -23,6 +23,7 @@ public class MainPage {
         $(".header-new__logo").shouldHave(cssValue("font", "13px / 16.003px SBSansDisplay, OpenSans, \"Helvetica Neue\", Helvetica, Arial, sans-serif"));
         return this;
     }
+
     public MainPage goToPage(String name) {
         step(String.format("Перейти на страницу раздела \"%s\"", name), () -> $(byText(name)).click());
         return this;
@@ -32,5 +33,6 @@ public class MainPage {
                 $("#main").shouldHave(text(disc)));
         return this;
     }
+
 
 }
