@@ -33,5 +33,4 @@ public class SberSiteTests extends TestBase {
         mainPage.goToPage(name);
         mainPage.checkPageTitle(String.valueOf(disc));
     }
-
 }

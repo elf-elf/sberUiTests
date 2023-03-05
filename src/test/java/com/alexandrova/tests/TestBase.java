@@ -1,43 +1,34 @@
 package com.alexandrova.tests;
 
 import com.alexandrova.attach.Attach;
-import com.alexandrova.config.CredentialsConfig;
+import com.alexandrova.config.*;
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.junit5.BrowserPerTestStrategyExtension;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
-import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.Browser;
 
 public class TestBase {
-    @ExtendWith({BrowserPerTestStrategyExtension.class})
+    private static final WebConfig webConfig = ConfigReader.Instance.read();
+    private static final ProjectConfiguration projectConfiguration = new ProjectConfiguration(webConfig);
 
-        public static CredentialsConfig config = ConfigFactory.create(CredentialsConfig.class);
+    @BeforeAll
+    public static void setUp() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+        projectConfiguration.webConfig();
+    }
 
-        @BeforeAll
-        static void beforeAll() {
-
-            SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
-
-            Configuration.baseUrl = "https://sberprime.sber.ru/";
-            Configuration.browserSize = "1920x1080";
-            Configuration.remote = config.server();
-
-            DesiredCapabilities capabilities = new DesiredCapabilities();
-            capabilities.setCapability("enableVNC",true);
-            capabilities.setCapability("enableVideo",true);
-            Configuration.browserCapabilities = capabilities;
-        }
-
-        @AfterEach
-        void addAttachments () {
-            Attach.screenshotAs("Screenshot");
-            Attach.pageSource();
+    @AfterEach
+    void addAttachments() {
+        Attach.screenshotAs("Last screenshot");
+        Attach.pageSource();
+        if (Configuration.browser.equals(Browser.CHROME.browserName())) {
             Attach.browserConsoleLogs();
-            Attach.addVideo();
         }
+        if (projectConfiguration.isRemote()) {
+            Attach.addVideo(projectConfiguration.getVideoStorageUrl());
+        }
+    }
     }
 

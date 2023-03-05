@@ -80,3 +80,17 @@ tasks.withType(Test) {
 }
 
 
+task search_tests (type: Test) {
+    useJUnitPlatform {
+        includeTags "search"
+        includeTags "address"
+    }
+
+
+    task page_tests(type: Test) {
+        useJUnitPlatform {
+            includeTags "page"
+            includeTags "form"
+        }
+    }
+}
